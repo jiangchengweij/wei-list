@@ -30,5 +30,9 @@ export default {
   renderReverse: {
     type: Boolean,
     default: false,
+  },
+  refresherEnable: {
+    type: Boolean,
+    default: false,
   }
 }

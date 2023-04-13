@@ -15,8 +15,8 @@
   <!-- #ifndef APP-NVUE -->
   <scroll-view>
   <!-- #endif -->
-    <wei-refresh>
-      <slot name="refresh"></slot>
+    <wei-refresh v-if="refresherEnable">
+      <slot name="refresh"></slot>s
     </wei-refresh>
     <slot></slot>
   <!-- #ifndef APP-NVUE -->
