@@ -1,0 +1,77 @@
+<template>
+  <wei-waterfall
+    column-count="2"
+    left-gap="10"
+    right-gap="10"
+    column-gap="10"
+  >
+    <wei-cell v-for="item in listData" :key="item.id">
+      <view class="demo-item">
+        <image class="demo-item-image" :src="item.thumb" mode="widthFix"></image>
+        <view class="demo-item-content">
+          <text class="demo-item-title">{{ item.title }}</text>
+          <text class="demo-item-subTitle">{{ item.subTitle }}</text>
+          <text class="demo-item-price">{{ item.price }}</text>
+        </view>
+      </view>
+    </wei-cell>
+  </wei-waterfall>
+</template>
+
+<script setup>
+  import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
+  import { ref } from 'vue';
+
+  const listData = ref([]);
+  
+  onLoad(() => {
+    loadData();
+  }) 
+
+  function loadData() {
+    listData.value = getTestList();
+  }
+  
+  function getTestList() {
+    const curList = [];
+    for(var i=0; i<20; i++) {
+      const ind = i + 1;
+      curList.push({
+        id: 'key_'+ind,
+        title: '主标题'+ind,
+        subTitle: i%2==0 ? '端副标题'+ind : '长长长长长长长长长长长长长长长副标题'+ind,
+        price: '￥'+(ind * 10),
+        thumb: `/static/images/test${(i % 4)+1}.webp`
+      })
+    }
+    return curList;
+  }
+</script>
+
+<style>
+  .demo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background-color: #fff;
+    border-radius: 4px;
+    margin-bottom: 15px;
+  }
+  .demo-item-content {
+    display: flex;
+    flex-direction: column;
+    padding: 5px 10px;
+  }
+  .demo-item-title {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .demo-item-subTitle {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .demo-item-price {
+    font-size: 16px;
+    color: #f0ad4e;
+  }
+</style>
