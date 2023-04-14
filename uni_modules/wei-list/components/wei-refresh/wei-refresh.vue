@@ -1,26 +1,63 @@
 <template>
   <!-- #ifdef APP-NVUE -->
-  <refresh>
+  <refresh 
+    @refresh="onRefresh"
+    @pullingdown="onPullingdown"
+    :display="show ? 'show' : 'hide'"
+  >
   <!-- #endif -->
-  <!-- #ifndef APP-NVUE -->
-  <view class="wei-refresh">
-  <!-- #endif -->
+  <view 
+    class="wei-refresh"
+    :style="{ height: getUnit(pullDistance) }"
+  >
     <slot>
-      <text>下拉刷新</text>
+      <view class="wei-refresh-content">
+        <text>{{ refreshText }}</text>
+      </view>
     </slot>
-  <!-- #ifndef APP-NVUE -->
   </view>
-  <!-- #endif -->
   <!-- #ifdef APP-NVUE -->
   </refresh>
   <!-- #endif -->
 </template>
 
 <script setup>
-  defineProps({
-    
-  })
+  import { getUnit } from '../wei-list/util.js';
+  const emit = defineEmits(['refresh', 'pullingdown']);
+  const props = defineProps({
+    show: {
+      type: Boolean,
+      default: false
+    },
+    refreshText: {
+      type: String,
+      default: '',
+    },
+    pullDistance: {
+      type: [String, Number],
+      default: 50,
+    }
+  });
+  
+  function onPullingdown(e) {
+    emit('pullingdown', e)
+  }
+  
+  function onRefresh(e) {
+    emit('refresh', e);
+  }
+  
 </script>
 
-<style>
+<style lang="scss">
+  .wei-refresh {
+    width: 750rpx;
+    &-content {
+      padding: 10px;
+      flex: 1;
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: center;
+    }
+  }
 </style>

@@ -34,5 +34,13 @@ export default {
   refresherEnable: {
     type: Boolean,
     default: false,
+  },
+  refreshTextConfig: {
+    type: Object,
+    default: null,
+  },
+  loadingText: {
+    type: Object,
+    default: null,
   }
 }

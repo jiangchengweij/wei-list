@@ -1,5 +1,5 @@
 <template>
-  <wei-list>
+  <wei-list :refresherEnable="true" :loadmoreoffset="30">
     <wei-cell v-for="item in listData" :key="item.id">
       <view class="demo-item">
         <image class="demo-item-image" :src="item.thumb" mode="widthFix"></image>
