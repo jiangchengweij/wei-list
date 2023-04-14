@@ -17,6 +17,9 @@
 </template>
 
 <script setup>
+  defineProps({
+    
+  })
 </script>
 
 <style>
