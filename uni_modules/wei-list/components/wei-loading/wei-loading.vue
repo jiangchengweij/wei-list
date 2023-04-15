@@ -1,15 +1,16 @@
 <template>
   <!-- #ifdef APP-NVUE -->
   <loading 
-    v-if="show"
+    :display="loading ? 'show' : 'hide'"
   >
   <!-- #endif -->
-  <view 
+ <view 
     class="wei-loading"
   >
     <slot>
       <view class="wei-loading-content">
-        <text>{{ loadingText }}</text>
+        <loading-indicator @loading="onLoading" class="wei-loading-indicator" :animating="true"></loading-indicator>
+        <text class="wei-loading-text">{{ loadingText }}</text>
       </view>
     </slot>
   </view>
@@ -19,21 +20,38 @@
 </template>
 
 <script setup>
+  const emit = defineEmits(['loading'])
   const props = defineProps({
-    show: {
-      type: Boolean,
-      default: false
+    loading: {
+      type: true,
+      default: true
     },
     loadingText: {
       type: String,
       default: '',
     }
   });
+  
+  function onLoading(e) {
+    emit('loading', e)
+  }
 </script>
 
 <style lang="scss">
   .wei-loading {
     width: 750rpx;
-    height: 30px;
+    &-content {
+      padding: 10px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+    &-indicator {
+      width: 25px;
+      height: 25px;
+    }
+    &-text {
+      margin-left: 4px;
+    }
   }
 </style>

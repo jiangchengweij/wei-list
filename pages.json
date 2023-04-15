@@ -15,7 +15,8 @@
     {
     	"path": "pages/demo-list/demo-list",
     	"style": {
-    		"navigationBarTitleText": "list"
+    		"navigationBarTitleText": "list",
+        "disableScroll": true
     	}
     }
 	],

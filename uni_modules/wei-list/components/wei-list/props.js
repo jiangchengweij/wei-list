@@ -39,8 +39,12 @@ export default {
     type: Object,
     default: null,
   },
-  loadingText: {
+  loadingTextConfig: {
     type: Object,
     default: null,
+  },
+  headHeight: {
+    type: [String, Number],
+    default: 50,
   }
 }
