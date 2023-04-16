@@ -17,6 +17,7 @@
   <!-- #ifndef APP-NVUE -->
   </scroll-view>
   <!-- #endif -->
+  <wei-loading loadingText="正在刷新" :loading="true"></wei-loading>
   <!-- #ifdef APP-NVUE -->
   </waterfall>
   <!-- #endif -->

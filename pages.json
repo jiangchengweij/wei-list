@@ -16,7 +16,8 @@
     	"path": "pages/demo-list/demo-list",
     	"style": {
     		"navigationBarTitleText": "list",
-        "disableScroll": true
+        "disableScroll": true,
+        "enablePullDownRefresh": true
     	}
     }
 	],

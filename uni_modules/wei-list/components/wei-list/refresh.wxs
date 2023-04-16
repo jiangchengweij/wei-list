@@ -1,6 +1,4 @@
 function propObserver(newValue, oldValue, ownerIns, ins) {
-  console.log('3434234234234')
-  console.log(oldValue);
 }
 
 function onPulling(evt, ownerInstance) {
@@ -8,11 +6,6 @@ function onPulling(evt, ownerInstance) {
   console.log(listInstance);
   var height = listInstance.getDataset().headheight;
   ownerInstance.callMethod('_handleTest', 'testset');
-  // var view = instance.selectComponent('.refresh-container')
-  // view.setStyle({
-  //   opacity: p,
-  //   transform: "scale(" + p + ")"
-  // })
 }
 
 module.exports = {

@@ -1,40 +1,54 @@
 <template>
   <!-- #ifdef APP-NVUE -->
-  <loading 
-    :display="loading ? 'show' : 'hide'"
-  >
+  <cell :recycle="false">
   <!-- #endif -->
- <view 
+  <view 
     class="wei-loading"
   >
     <slot>
       <view class="wei-loading-content">
-        <loading-indicator @loading="onLoading" class="wei-loading-indicator" :animating="true"></loading-indicator>
+        <image ref="ani" :src="loadingIcon" class="wei-loading-indicator"></image>
+<!--        <loading-indicator 
+          v-if="loading"
+          :animating="true" class="wei-loading-indicator"></loading-indicator> -->
         <text class="wei-loading-text">{{ loadingText }}</text>
       </view>
     </slot>
   </view>
   <!-- #ifdef APP-NVUE -->
-  </loading>
+  </cell>
   <!-- #endif -->
 </template>
 
 <script setup>
+  import { loadingIcon } from '../wei-list/util.js';
+  import { ref, onMounted } from "vue";
+  // #ifdef APP-NVUE
+  const animation = weex.requireModule('animation');
+  // #endif
   const emit = defineEmits(['loading'])
   const props = defineProps({
     loading: {
-      type: true,
-      default: true
+      type: Boolean,
+      default: false
     },
     loadingText: {
       type: String,
       default: '',
     }
   });
+  const ani = ref(null);
+  onMounted(() => {
+    setTimeout(() => {
+      startAnimate();
+    }, 1000)
+    
+  })
   
   function onLoading(e) {
     emit('loading', e)
   }
+  let aniAngel = 360;
 </script>
 
 <style lang="scss">

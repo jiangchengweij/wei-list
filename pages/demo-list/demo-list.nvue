@@ -1,5 +1,10 @@
 <template>
-  <wei-list class="wei-list" :refresherEnable="true" :loadmoreoffset="30" @loading="onLoading" @refresh="onRefresh">
+  <wei-list 
+    class="wei-list" 
+    :refresherEnable="true" 
+    :loadmoreoffset="30" 
+    @loading="onLoading" 
+  >
     <wei-cell v-for="item in listData" :key="item.id">
       <view class="demo-item">
         <image class="demo-item-image" :src="item.thumb" mode="widthFix"></image>
@@ -18,6 +23,7 @@
   import { ref } from 'vue';
 
   const listData = ref([]);
+  let isLoading = false;
   
   onLoad(() => {
     loadData();
@@ -27,12 +33,17 @@
     listData.value = getTestList();
   }
   
-  function onRefresh(e) {
+  onPullDownRefresh(() => {
+    if(isLoading) return;
+    console.log('222222222222222')
+    isLoading = true;
     setTimeout(() => {
       loadData();
-      e.endRefresh()
+      isLoading = false;
+      uni.stopPullDownRefresh();
     }, 1000);
-  }
+  })
+  
   
   function onLoading(e) {
     setTimeout(() => {

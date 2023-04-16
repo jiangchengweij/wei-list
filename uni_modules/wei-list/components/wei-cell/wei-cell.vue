@@ -1,6 +1,11 @@
 <template>
   <!-- #ifdef APP-NVUE -->
-  <cell>
+  <cell
+    :keepScollPosition="keepScollPosition"
+    :insetAnimation="insetAnimation"
+    :recycle="recycle"
+    :renderReversePosition="renderReversePosition"
+  >
   <!-- #endif -->
   <!-- #ifndef APP-NVUE -->
   <view class="wei-cell">
