@@ -24,7 +24,9 @@
       </template>
       <!-- #endif -->
       <slot></slot>
-      <wei-loading :loadingText="loadingText" :loading="isLoading"></wei-loading>
+      <wei-loading :loadingText="loadingText" :loading="isLoading">
+        
+      </wei-loading>
     <!-- #ifndef APP-NVUE -->
     </view>
     <!-- #endif -->
@@ -38,7 +40,7 @@
   import { computed } from "vue";
   import { useProvideList } from './context.js';
   import basicProps from './props.js';
-  import { useLoading } from "./useLoading.js";
+  import { useLoading } from "../wei-loading/useLoading.js";
   const emit = defineEmits(['loading', 'refresh']);
   const props = defineProps(basicProps);
   const { isLoading, loadingText, onLoadmore, isFinished } = useLoading(props, emit);

@@ -7,7 +7,7 @@
   >
     <slot>
       <view class="wei-loading-content">
-        <image ref="ani" :src="loadingIcon" class="wei-loading-indicator"></image>
+        <image :src="loadingIcon" class="wei-loading-indicator"></image>
 <!--        <loading-indicator 
           v-if="loading"
           :animating="true" class="wei-loading-indicator"></loading-indicator> -->
@@ -19,13 +19,11 @@
   </cell>
   <!-- #endif -->
 </template>
-
+ 
 <script setup>
   import { loadingIcon } from '../wei-list/util.js';
   import { ref, onMounted } from "vue";
-  // #ifdef APP-NVUE
-  const animation = weex.requireModule('animation');
-  // #endif
+
   const emit = defineEmits(['loading'])
   const props = defineProps({
     loading: {
@@ -37,18 +35,11 @@
       default: '',
     }
   });
-  const ani = ref(null);
-  onMounted(() => {
-    setTimeout(() => {
-      startAnimate();
-    }, 1000)
-    
-  })
   
   function onLoading(e) {
     emit('loading', e)
   }
-  let aniAngel = 360;
+
 </script>
 
 <style lang="scss">
