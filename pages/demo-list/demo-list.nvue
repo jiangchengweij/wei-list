@@ -35,7 +35,6 @@
   
   onPullDownRefresh(() => {
     if(isLoading) return;
-    console.log('222222222222222')
     isLoading = true;
     setTimeout(() => {
       loadData();
