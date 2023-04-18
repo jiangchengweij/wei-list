@@ -1,5 +1,4 @@
 <template>
-
   <view 
     class="wei-loading"
   >

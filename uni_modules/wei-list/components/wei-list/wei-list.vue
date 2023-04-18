@@ -58,13 +58,17 @@
     type: 'list',
   })
 
-  // #ifndef APP-NVUE
-  onReachBottom((e) => {
+  function reload(e = {}) {
+    onRefresh(e);
+  }
+  
+  function loadMore(e = {}) {
     onLoadmore(e);
-  })
-  // #endif
-  onPullDownRefresh(e => {
-    onRefresh(e)
+  }
+  
+  defineExpose({
+    reload,
+    loadMore
   })
 </script>
 <style>

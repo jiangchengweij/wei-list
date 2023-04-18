@@ -4,6 +4,7 @@
     :loadmoreoffset="30" 
     @loading="onLoadData($event, false)" 
     @refresh="onLoadData($event)"
+    ref="listRef"
   >
     <wei-cell v-for="item in listData" :key="item.id">
       <view class="demo-item">
@@ -19,15 +20,25 @@
 </template>
 
 <script setup>
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onPullDownRefresh, onReachBottom  } from '@dcloudio/uni-app';
   import { ref } from 'vue';
 
   const listData = ref([]);
-  let isLoading = false;
+  const listRef = ref(null);
   
   onLoad(() => {
-    uni.startPullDownRefresh()
+    setTimeout(() => {
+      listRef.value.reload()
+    }, 100)
   }) 
+  
+  onPullDownRefresh(() => {
+    listRef.value.reload()
+  })
+  
+  onReachBottom(() => {
+    listRef.value.loadMore()
+  })
   
   function onLoadData(e, isRefresh = true) {
     setTimeout(() => {
@@ -68,10 +79,9 @@
     flex-direction: row;
     align-items: center;
     background-color: #fff;
-    border-radius: 4px;
     padding: 4px;
     height: 100px;
-    margin-top: 10px;
+    margin-bottom: 10px;
   }
   .demo-item-image {
     width: 80px;

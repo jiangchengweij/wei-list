@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-  import { computed, onMounted, getCurrentInstance } from "vue";
+  import { computed, onMounted, getCurrentInstance, ref } from "vue";
   import { useInjectForm } from '../wei-list/context.js';
   import { getToNum } from '../wei-list/util.js';
 
@@ -46,43 +46,47 @@
       default: null,
     }
   })
-  
+
+  // #ifndef APP-NVUE
   const instance = getCurrentInstance();
-  
+  const { columnCount, type: listType, waterfallItemWidth, columnGap, leftGap, addChildren } = useInjectForm();
+
   onMounted(() => {
     setTimeout(() => {
       uni.createSelectorQuery().in(instance)
         .select('.wei-cell')
         .boundingClientRect((res) => {
-          console.log(res)
+          addChildren(res, ({ top, left }) => {
+            //console.log(top, left);
+            curTop.value = top;
+            curLeft.value = left;
+          });
         }).exec();
     }, 100)
   })
   
-  // #ifndef APP-NVUE
-  const { columnCount, type: listType, waterfallItemWidth, columnGap } = useInjectForm();
+  const curTop = ref(0);
+  const curLeft = ref(0);
+  
   const cellStyle = computed(() => {
     const { index } = props;
     const style = {};
-    style.top = 300 * index + 'px';
-    style.left = 0;
-    // if(listType === 'watefall' && waterfallItemWidth.value > 0) {
-    //   style.width = waterfallItemWidth.value + 'px';
-    // }
-    // if(index !== null && columnCount.value > 0) {
-    //   if((index + 1) % columnCount.value > 0) {
-    //     style.marginRight = columnGap.value + 'px';
-    //   }
-    // }
+    if(listType === 'watefall') {
+      style.position = 'absolute';
+      if(waterfallItemWidth.value > 0) {
+        style.width = waterfallItemWidth.value + 'px';
+      }
+      style.top = curTop.value + 'px';
+      style.left = curLeft.value + 'px';
+    } else {
+      style.width = '100%';
+    }
     return style;
   })
   // #endif
 </script>
 
-<style lang="scss">
-  /* #ifndef APP-NVUE */
-  .wei-cell {
-    position: absolute;
-  }
-  /* #endif */
+<style>
+
 </style>
+

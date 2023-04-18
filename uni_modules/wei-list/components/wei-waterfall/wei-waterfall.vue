@@ -19,24 +19,21 @@
   >
   <!-- #endif -->
   <!-- #ifndef APP-NVUE -->
-  <view class="wei-waterfall-list">
-  <!-- #endif -->
-  
-    <!-- #ifndef APP-NVUE -->
-    <view class="wei-waterfall-list-content" :style="{
+  <view class="wei-waterfall-list"
+    :style="{
       paddingLeft: getToNum(leftGap) + 'px',
       paddingRight: getToNum(rightGap) + 'px',
-    }">
-    <!-- #endif -->
-      <slot></slot>
-    <!-- #ifndef APP-NVUE -->
-    </view>
-    <!-- #endif -->
+    }"
+  >
+  <!-- #endif -->
+
+    <slot></slot>
+
 
     <!-- #ifdef APP-NVUE -->
     <header>
     <!-- #endif -->  
-      <wei-loading :loadingText="loadingText" :loading="isLoading" :finished="isFinished">
+      <wei-loading :style="loadingStyle" :loadingText="loadingText" :loading="isLoading" :finished="isFinished">
       </wei-loading>
     <!-- #ifdef APP-NVUE -->
     </header>
@@ -96,7 +93,37 @@
     }
     return 0;
   })
+  
+  const children = [];
+  
+  function addChildren(rect, callback) {
+    const { leftGap, rightGap, columnGap, columnCount, columnWidth } = props;
+    const len = children.length;
+    const count = getToNum(columnCount, 1) 
+    const left = len % count
+      * (waterfallItemWidth.value + getToNum(columnGap)) + getToNum(leftGap);
+    let top = 0;
+    if(len >= count) {
+      const prevItem = children[len - count];
+      top = prevItem.top + prevItem.height + 10; 
+    }
+    loadingTop.value = Math.max(loadingTop.value, top + rect.height);
+    children.push({ top, left, height: rect.height })
+    callback({top, left});
+  }
   // #endif
+  
+  const loadingTop = ref(0);
+  
+  const loadingStyle = computed(() => {
+    const style = {};
+    // #ifndef APP-NVUE
+    style.position = 'absolute';
+    style.top = loadingTop.value + 'px';
+    style.left = 0;
+    // #endif
+    return style;
+  })
 
   function reload(e = {}) {
     onRefresh(e);
@@ -110,11 +137,12 @@
     type: 'watefall',
     // #ifndef APP-NVUE
     columnCount: computed(() => getToNum(props.columnCount, 1)),
-    columnWidth: computed(() => props.columnWidth),
+    columnWidth: computed(() => getToNum(props.columnWidth, 0)),
     columnGap: computed(() => getToNum(props.columnGap, 0)),
-    leftGap: computed(() => props.leftGap),
-    rightGap: computed(() => props.rightGap),
+    leftGap: computed(() => getToNum(props.leftGap, 0)),
+    rightGap: computed(() => getToNum(props.rightGap, 0)),
     waterfallItemWidth: waterfallItemWidth,
+    addChildren,
     // #endif
   })
   
@@ -125,7 +153,7 @@
 </script>
 
 <style>
-  .wei-waterfall-list-content {
+  .wei-waterfall-list {
     /* #ifndef APP-NVUE */
     position: relative;
 /*    display: flex;
