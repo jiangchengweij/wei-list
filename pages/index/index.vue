@@ -12,7 +12,7 @@
   function onRouter(url) {
     uni.navigateTo({
       url,
-    })
+    });
   }
 </script>
 
@@ -42,5 +42,8 @@
   .demo-btn {
     margin-bottom: 20px;
   }
-  
+  .loading {
+    width: 30px;
+    height: 30px;
+  }
 </style>

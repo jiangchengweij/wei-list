@@ -1,9 +1,9 @@
 <template>
   <wei-list 
     class="wei-list" 
-    :refresherEnable="true" 
     :loadmoreoffset="30" 
-    @loading="onLoading" 
+    @loading="onLoadData($event, false)" 
+    @refresh="onLoadData($event)"
   >
     <wei-cell v-for="item in listData" :key="item.id">
       <view class="demo-item">
@@ -19,38 +19,30 @@
 </template>
 
 <script setup>
-  import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
+  import { onLoad } from '@dcloudio/uni-app';
   import { ref } from 'vue';
 
   const listData = ref([]);
   let isLoading = false;
   
   onLoad(() => {
-    loadData();
+    uni.startPullDownRefresh()
   }) 
-
-  function loadData() {
-    listData.value = getTestList();
-  }
   
-  onPullDownRefresh(() => {
-    if(isLoading) return;
-    console.log('222222222222222')
-    isLoading = true;
+  function onLoadData(e, isRefresh = true) {
     setTimeout(() => {
-      loadData();
-      isLoading = false;
-      uni.stopPullDownRefresh();
-    }, 1000);
-  })
-  
-  
-  function onLoading(e) {
-    setTimeout(() => {
-      const append = getTestList(2);
-      listData.value.push(...append);
-      e.endLoading();
-    }, 2000)
+      if(isRefresh) {
+        index = 0;
+        listData.value = getTestList(20);
+      } else {
+        const append = getTestList(2);
+        listData.value.push(...append);
+      }
+      if(index >= 24) {
+        e.end();
+      }
+      e.complete();
+    }, 1500)
   }
   
   let index = 0;

@@ -13,7 +13,7 @@
       :renderReverse="renderReverse"
       @loadmore="onLoadmore"
     >
-    <!-- #endif -->
+  <!-- #endif -->
     <!-- #ifndef APP-NVUE -->
     <view class="wei-list">
     <!-- #endif -->
@@ -24,37 +24,58 @@
       </template>
       <!-- #endif -->
       <slot></slot>
-      <wei-loading :loadingText="loadingText" :loading="isLoading">
-        
-      </wei-loading>
+
+      <!-- #ifdef APP-NVUE -->
+      <cell :recycle="false">
+      <!-- #endif -->  
+        <wei-loading :loadingText="loadingText" :loading="isLoading" :finished="isFinished">
+        </wei-loading>
+      <!-- #ifdef APP-NVUE -->
+      </cell>
+      <!-- #endif -->
+      
     <!-- #ifndef APP-NVUE -->
     </view>
     <!-- #endif -->
-    <!-- #ifdef APP-NVUE -->
+  <!-- #ifdef APP-NVUE -->
     </list>
-    <!-- #endif -->
   </view>
+  <!-- #endif -->
 
 </template>
 <script setup>
+  import { onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app';
   import { computed } from "vue";
   import { useProvideList } from './context.js';
   import basicProps from './props.js';
   import { useLoading } from "../wei-loading/useLoading.js";
+  import { useRefresh } from './useRefresh.js';
   const emit = defineEmits(['loading', 'refresh']);
   const props = defineProps(basicProps);
   const { isLoading, loadingText, onLoadmore, isFinished } = useLoading(props, emit);
+  const { onRefresh } = useRefresh(props, emit);
   useProvideList({
     type: 'list',
   })
-  const showLoading = computed(() => {
-    return !isFinished.value;
+
+  // #ifndef APP-NVUE
+  onReachBottom((e) => {
+    onLoadmore(e);
+  })
+  // #endif
+  onPullDownRefresh(e => {
+    onRefresh(e)
   })
 </script>
 <style>
   .wei-list {
+    /* #ifdef APP-NVUE */
+    flex: 1;
+    /* #endif */
     /* #ifndef APP-NVUE */
-    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     /* #endif */
   }
 </style>

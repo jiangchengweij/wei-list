@@ -11,25 +11,25 @@ export function useLoading(props, emit) {
       errro: '',
     }, props.loadingTextConfig)
   })
-  
+
   function onLoadmore(e) {
-    if(isFinished.value) { return };
+    if(isLoading.value || isFinished.value) { return };
     isLoading.value = true;
     loadingText.value = loadingTextMap.value.loading;
     emit('loading', {
       ...e,
-      endLoading,
-      stopLoading,
+      end,
+      complete,
     })
   }
 
-  function endLoading() {
+  function end() {
     isLoading.value = false;
-    isFinished.value=  true;
+    isFinished.value =  true;
     loadingText.value = loadingTextMap.value.finished;
   }
   
-  function stopLoading() {
+  function complete() {
     isLoading.value = false;
   }
   
@@ -37,6 +37,8 @@ export function useLoading(props, emit) {
     isLoading,
     isFinished,
     loadingText,
-    onLoadmore
+    onLoadmore,
+    end,
+    complete
   }
 }

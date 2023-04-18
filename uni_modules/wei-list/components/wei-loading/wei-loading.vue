@@ -1,23 +1,18 @@
 <template>
-  <!-- #ifdef APP-NVUE -->
-  <cell :recycle="false">
-  <!-- #endif -->
+
   <view 
     class="wei-loading"
   >
     <slot>
       <view class="wei-loading-content">
-        <image :src="loadingIcon" class="wei-loading-indicator"></image>
-<!--        <loading-indicator 
-          v-if="loading"
-          :animating="true" class="wei-loading-indicator"></loading-indicator> -->
+        <template v-if="!finished">
+          <image :src="loadingIcon" class="wei-loading-indicator"></image>
+        </template>
         <text class="wei-loading-text">{{ loadingText }}</text>
       </view>
     </slot>
   </view>
-  <!-- #ifdef APP-NVUE -->
-  </cell>
-  <!-- #endif -->
+
 </template>
  
 <script setup>
@@ -33,6 +28,10 @@
     loadingText: {
       type: String,
       default: '',
+    },
+    finished: {
+      type: Boolean,
+      default: false,
     }
   });
   

@@ -9,15 +9,17 @@
     {
     	"path": "pages/demo-waterfall/demo-waterfall",
     	"style": {
-    		"navigationBarTitleText": "watefall"
+    		"navigationBarTitleText": "watefall",
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50
     	}
     },
     {
     	"path": "pages/demo-list/demo-list",
     	"style": {
     		"navigationBarTitleText": "list",
-        "disableScroll": true,
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50
     	}
     }
 	],

@@ -43,8 +43,4 @@ export default {
     type: Object,
     default: null,
   },
-  headHeight: {
-    type: [String, Number],
-    default: 50,
-  }
 }

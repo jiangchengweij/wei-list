@@ -14,4 +14,15 @@
 
 <style>
 	/*每个页面公共css */
+  /* #ifndef APP-NVUE */
+  page {
+    background-color: #ededed;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    page {
+      background-color: #111;
+    }
+  }
+  /* #endif */
 </style>
