@@ -21,18 +21,31 @@
   <!-- #ifndef APP-NVUE -->
   <view class="wei-waterfall-list" :style="{ height: listHeight + 'px' }">
   <!-- #endif -->
-    <slot name="header"></slot>
+  
+    <!-- #ifndef APP-NVUE -->
+    <view class="wei-waterfall-header">
+    <!-- #endif -->
+      <slot name="header"></slot>
+    <!-- #ifndef APP-NVUE -->
+    </view>
+    <!-- #endif -->
     
     <!-- #ifndef APP-NVUE -->
-    <view class="wei-waterfall-list__bd">
+    <view class="wei-waterfall-list__bd" :style="listbdStyle">
     <!-- #endif -->
       <slot></slot>
       
       <!-- #ifdef APP-NVUE -->
       <header>
       <!-- #endif -->  
+        <!-- #ifndef APP-NVUE -->
+        <view class="wei-waterfall-loading">
+        <!-- #endif -->
         <wei-loading :style="loadingStyle" :loadingText="loadingText" :loading="isLoading" :finished="isFinished">
         </wei-loading>
+        <!-- #ifndef APP-NVUE -->
+        </view>
+        <!-- #endif -->
       <!-- #ifdef APP-NVUE -->
       </header>
       <!-- #endif -->
@@ -68,18 +81,35 @@
   const instance = getCurrentInstance();
   const waterfallWidth = ref(0);
   const listHeight = ref(1);
+  const listTop = ref(0);
+  const loadingHeight = ref(0);
   
   onMounted(() => {
-    setWaterfallWidth();
+    setInit();
   })
   
-  function setWaterfallWidth() {
-    uni.createSelectorQuery().in(instance)
-      .select('.wei-waterfall-list')
-      .boundingClientRect((res) => {
-        if(res) 
-          waterfallWidth.value = res.width;
-      }).exec();
+  function setInit() {
+    getClientRect('.wei-waterfall-list').then(res => {
+      waterfallWidth.value = res.width;
+    })
+    getClientRect('.wei-waterfall-list__bd').then(res => {
+      listTop.value = res.top;
+    })
+    getClientRect('.wei-waterfall-loading').then(res => {
+      loadingHeight.value = res.height;
+    })
+  }
+  
+  function getClientRect(cls) {
+    return new Promise((resolve, reject) => {
+      uni.createSelectorQuery().in(instance)
+        .select(cls)
+        .boundingClientRect((res) => {
+          if(res) 
+            resolve(res);
+          else reject(res);
+        }).exec();
+    })
   }
   
   const waterfallItemWidth = computed(() => {
@@ -102,58 +132,87 @@
   let tempWatiItem = [];
   
   function addChildren(rect, callback) {
-    const { leftGap, rightGap, columnGap, columnCount, columnWidth } = props;
+    const { leftGap, rightGap, columnGap, rowGap, columnCount, columnWidth, loadmoreoffset, autoFill } = props;
     const len = children.length;
     const count = getToNum(columnCount, 1) ;
     const tempColumnGap = getToNum(columnGap);
     const tempLeftGap = getToNum(leftGap);
-    const left = len % count
-      * (waterfallItemWidth.value + getToNum(columnGap)) + getToNum(leftGap);
-    let top = 0;
-    if(len >= count) {
-      const prevItem = children[len - count];
-      top = prevItem.top + prevItem.height + 10;
-    }
-    loadingTop.value = Math.max(loadingTop.value, top + rect.height);
-    listHeight.value = 90 + top + 30;
-    children.push({ top, left, height: rect.height })
-    callback({top, left});
+    const tempRowGap = getToNum(rowGap);
     
-    //todo 暂时不可用 根据元素自身高度获得最佳插入位置
-    // tempWatiItem.push({ rect, callback });
-    // if(tempWatiItem.length >= count) {
-    //   if(len >= count) {
-    //     const prevs = children.slice(len - count, len);
-    //     tempWatiItem.sort((a, b) => a.height < b.height);
-    //     prevs.sort((a, b) => a.height + a.top < b.height + b.top);
-    //     tempWatiItem.forEach((item, index) => {
-    //       const left = index % count * (waterfallItemWidth.value + tempColumnGap) + tempLeftGap;
-    //       const prevItem = prevs[index];
-    //       var top = prevItem.top + prevItem.height + 10;
-    //       children.push({ top, left, height: item.rect.height });
-    //       item.callback({ top, left });
-    //     })
-    //     tempWatiItem = [];
-    //   } else {
-    //     tempWatiItem.forEach((item, index) => {
-    //       const left = index % count * (waterfallItemWidth.value + tempColumnGap) + tempLeftGap;
-    //       const top = 0;
-    //       children.push({ top, left, height: item.rect.height });
-    //       item.callback({ top, left });
-    //     });
-    //     tempWatiItem = [];
-    //   }
-    // }
+    if(autoFill) { //启用智能填坑
+      if(len >= count) {
+        var ind = len - 1;
+        var minTop = children[ind].top + children[ind].height;
+        var minInd = ind;
+        ind--;
+        var num = 0;
+        while(num < count && ind >= 0) {
+          const prevItem = children[ind];
+          if(!prevItem.fill) {
+            num++;
+            var tempTop = prevItem.height + prevItem.top
+            if(minTop > tempTop) {
+              minInd = ind;
+              minTop = tempTop;
+            }
+          }
+          ind--;
+        }
+        children[minInd].fill = true;
+        const left = children[minInd].left;
+        var top = minTop + tempLeftGap;
+        loadingTop.value = Math.max(loadingTop.value, minTop + rect.height + tempRowGap);
+        listHeight.value = listTop.value + loadingTop.value + loadingHeight.value;
+        children.push({ top, left, height: rect.height, fill: false });
+        callback({top, left});
+      } else {
+        var top = 0;
+        loadingTop.value = Math.max(loadingTop.value, rect.height + tempRowGap);
+        listHeight.value = listTop.value + loadingTop.value + loadingHeight.value;
+        const left = len % count
+          * (waterfallItemWidth.value + tempColumnGap) + tempLeftGap;
+        children.push({ top, left, height: rect.height, fill: false });
+        callback({top, left});
+      }
+    } else {
+      const left = len % count
+        * (waterfallItemWidth.value + tempColumnGap) + tempLeftGap;
+      let top = 0;
+      if(len >= count) {
+        const prevItem = children[len - count];
+        top = prevItem.top + prevItem.height + tempRowGap;
+      }
+      loadingTop.value = Math.max(loadingTop.value, top + rect.height);
+      listHeight.value = listTop.value + loadingTop.value + loadingHeight.value;
+      children.push({ top, left, height: rect.height });
+      callback({top, left});
+    }
   }
+  
+  const listbdStyle = computed(() => {
+    const { layout, columnCount, columnGap, leftGap, rightGap, rowGap } = props;
+    const style = {};
+    if(layout === 'grid') {
+      style.display = 'grid';
+      style.gridTemplateColumns = '1fr 1fr';
+      style.gridColumnGap = columnGap + 'px';
+      style.gridRowGap = rowGap + 'px';
+      style.paddingLeft = leftGap + 'px';
+      style.paddingRight = rightGap + 'px';
+    }
+    return style;
+  })
   // #endif
   
   const loadingTop = ref(0);
   
   const loadingStyle = computed(() => {
+    const { loadmoreoffset } = props;
     const style = {};
     // #ifndef APP-NVUE
     style.position = 'absolute';
     style.top = loadingTop.value + 'px';
+    style.height = loadmoreoffset + 'px';
     // #endif
     return style;
   })
@@ -175,6 +234,7 @@
     leftGap: computed(() => getToNum(props.leftGap, 0)),
     rightGap: computed(() => getToNum(props.rightGap, 0)),
     waterfallItemWidth: waterfallItemWidth,
+    layout: computed(() => props.layout),
     addChildren,
     // #endif
   })
@@ -188,9 +248,7 @@
 <style>
   .wei-waterfall-list {
     /* #ifndef APP-NVUE */
-/*    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap; */
+    flex: 1;
     /* #endif */
   }
   .wei-waterfall-list__bd {

@@ -4,15 +4,16 @@
     left-gap="10"
     right-gap="10"
     column-gap="10"
-    :loadmoreoffset="30" 
+    :loadmoreoffset="50" 
     @loading="onLoadData($event, false)"
     @refresh="onLoadData($event)"
     ref="listRef"
+    :autoFill="true"
   >
     <template #header>
       <wei-header>
         <view class="demo-header">
-          <text>头部信息</text>
+          <text>固定顶部</text>
         </view>
       </wei-header>
     </template>
@@ -60,7 +61,7 @@
         const append = getTestList(2);
         listData.value.push(...append);
       }
-      if(index >= 24) {
+      if(index >= 100) {
         e.end();
       }
       e.complete();

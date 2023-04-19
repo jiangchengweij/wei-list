@@ -49,20 +49,22 @@
 
   // #ifndef APP-NVUE
   const instance = getCurrentInstance();
-  const { columnCount, type: listType, waterfallItemWidth, columnGap, leftGap, addChildren } = useInjectForm();
+  const { columnCount, type: listType, waterfallItemWidth, columnGap, leftGap, addChildren, layout } = useInjectForm();
 
   onMounted(() => {
-    setTimeout(() => {
-      uni.createSelectorQuery().in(instance)
-        .select('.wei-cell')
-        .boundingClientRect((res) => {
-          addChildren(res, ({ top, left }) => {
-            //console.log(top, left);
-            curTop.value = top;
-            curLeft.value = left;
-          });
-        }).exec();
-    }, 100)
+    if(layout.value === 'watefall') {
+      setTimeout(() => {
+        uni.createSelectorQuery().in(instance)
+          .select('.wei-cell')
+          .boundingClientRect((res) => {
+            addChildren(res, ({ top, left }) => {
+              //console.log(top, left);
+              curTop.value = top;
+              curLeft.value = left;
+            });
+          }).exec();
+      }, 100)
+    }
   })
   
   const curTop = ref(0);
@@ -72,12 +74,14 @@
     const { index } = props;
     const style = {};
     if(listType === 'watefall') {
-      style.position = 'absolute';
-      if(waterfallItemWidth.value > 0) {
-        style.width = waterfallItemWidth.value + 'px';
+      if(layout.value === 'waterfall') { //布局方式
+        style.position = 'absolute';
+        if(waterfallItemWidth.value > 0) {
+          style.width = waterfallItemWidth.value + 'px';
+        }
+        style.top = curTop.value + 'px';
+        style.left = curLeft.value + 'px';
       }
-      style.top = curTop.value + 'px';
-      style.left = curLeft.value + 'px';
     } else {
       style.width = '100%';
     }

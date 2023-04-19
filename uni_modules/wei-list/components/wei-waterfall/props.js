@@ -15,6 +15,10 @@ export default {
     type: [String, Number],
     default: 'normal',
   },
+  rowGap: {
+    type: [String, Number],
+    default: 10,
+  },
   leftGap: {
     type: [String, Number],
     default: 0,
@@ -63,8 +67,12 @@ export default {
     type: Object,
     default: null,
   },
-  mode: {
+  layout: {
     type: String,
-    default: '',
+    default: 'grid',
+  },
+  autoFill: {
+    type: Boolean,
+    default: false
   }
 }

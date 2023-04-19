@@ -11,14 +11,23 @@
   <!-- #endif -->
 </template>
 
-<script>
+<script setup>
+  const props = defineProps({
+    sticky: {
+      type: Boolean,
+      default: false
+    },
+    top: {
+      type: Number,
+      default: 0,
+    }
+  })
 </script>
 
 <style>
   .wei-header {
     position: sticky;
     z-index: 999;
-    top: 44px;
   }
 </style>
 

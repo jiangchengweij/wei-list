@@ -43,8 +43,11 @@
 <style>
   .wei-loading {
     width: 750rpx;
+    display: flex;
+    flex-direction: column;
   }
   .wei-loading-content {
+    flex: 1;
     padding: 10px;
     flex-direction: row;
     align-items: center;
