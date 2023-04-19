@@ -63,4 +63,8 @@ export default {
     type: Object,
     default: null,
   },
+  mode: {
+    type: String,
+    default: '',
+  }
 }

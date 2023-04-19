@@ -19,24 +19,26 @@
   >
   <!-- #endif -->
   <!-- #ifndef APP-NVUE -->
-  <view class="wei-waterfall-list"
-    :style="{
-      paddingLeft: getToNum(leftGap) + 'px',
-      paddingRight: getToNum(rightGap) + 'px',
-    }"
-  >
+  <view class="wei-waterfall-list" :style="{ height: listHeight + 'px' }">
   <!-- #endif -->
+    <slot name="header"></slot>
+    
+    <!-- #ifndef APP-NVUE -->
+    <view class="wei-waterfall-list__bd">
+    <!-- #endif -->
+      <slot></slot>
+      
+      <!-- #ifdef APP-NVUE -->
+      <header>
+      <!-- #endif -->  
+        <wei-loading :style="loadingStyle" :loadingText="loadingText" :loading="isLoading" :finished="isFinished">
+        </wei-loading>
+      <!-- #ifdef APP-NVUE -->
+      </header>
+      <!-- #endif -->
 
-    <slot></slot>
-
-
-    <!-- #ifdef APP-NVUE -->
-    <header>
-    <!-- #endif -->  
-      <wei-loading :style="loadingStyle" :loadingText="loadingText" :loading="isLoading" :finished="isFinished">
-      </wei-loading>
-    <!-- #ifdef APP-NVUE -->
-    </header>
+    <!-- #ifndef APP-NVUE -->
+    </view>
     <!-- #endif -->
 
   <!-- #ifndef APP-NVUE -->
@@ -65,6 +67,7 @@
   // 计算元素的宽度传达给子元素用于布局
   const instance = getCurrentInstance();
   const waterfallWidth = ref(0);
+  const listHeight = ref(1);
   
   onMounted(() => {
     setWaterfallWidth();
@@ -96,20 +99,51 @@
   
   const children = [];
   
+  let tempWatiItem = [];
+  
   function addChildren(rect, callback) {
     const { leftGap, rightGap, columnGap, columnCount, columnWidth } = props;
     const len = children.length;
-    const count = getToNum(columnCount, 1) 
+    const count = getToNum(columnCount, 1) ;
+    const tempColumnGap = getToNum(columnGap);
+    const tempLeftGap = getToNum(leftGap);
     const left = len % count
       * (waterfallItemWidth.value + getToNum(columnGap)) + getToNum(leftGap);
     let top = 0;
     if(len >= count) {
       const prevItem = children[len - count];
-      top = prevItem.top + prevItem.height + 10; 
+      top = prevItem.top + prevItem.height + 10;
     }
     loadingTop.value = Math.max(loadingTop.value, top + rect.height);
+    listHeight.value = 90 + top + 30;
     children.push({ top, left, height: rect.height })
     callback({top, left});
+    
+    //todo 暂时不可用 根据元素自身高度获得最佳插入位置
+    // tempWatiItem.push({ rect, callback });
+    // if(tempWatiItem.length >= count) {
+    //   if(len >= count) {
+    //     const prevs = children.slice(len - count, len);
+    //     tempWatiItem.sort((a, b) => a.height < b.height);
+    //     prevs.sort((a, b) => a.height + a.top < b.height + b.top);
+    //     tempWatiItem.forEach((item, index) => {
+    //       const left = index % count * (waterfallItemWidth.value + tempColumnGap) + tempLeftGap;
+    //       const prevItem = prevs[index];
+    //       var top = prevItem.top + prevItem.height + 10;
+    //       children.push({ top, left, height: item.rect.height });
+    //       item.callback({ top, left });
+    //     })
+    //     tempWatiItem = [];
+    //   } else {
+    //     tempWatiItem.forEach((item, index) => {
+    //       const left = index % count * (waterfallItemWidth.value + tempColumnGap) + tempLeftGap;
+    //       const top = 0;
+    //       children.push({ top, left, height: item.rect.height });
+    //       item.callback({ top, left });
+    //     });
+    //     tempWatiItem = [];
+    //   }
+    // }
   }
   // #endif
   
@@ -120,7 +154,6 @@
     // #ifndef APP-NVUE
     style.position = 'absolute';
     style.top = loadingTop.value + 'px';
-    style.left = 0;
     // #endif
     return style;
   })
@@ -155,10 +188,12 @@
 <style>
   .wei-waterfall-list {
     /* #ifndef APP-NVUE */
-    position: relative;
 /*    display: flex;
     flex-direction: row;
     flex-wrap: wrap; */
     /* #endif */
+  }
+  .wei-waterfall-list__bd {
+    position: relative;
   }
 </style>

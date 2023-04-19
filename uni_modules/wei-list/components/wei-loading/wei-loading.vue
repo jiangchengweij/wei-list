@@ -40,21 +40,68 @@
 
 </script>
 
-<style lang="scss">
+<style>
   .wei-loading {
     width: 750rpx;
-    &-content {
-      padding: 10px;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
+  }
+  .wei-loading-content {
+    padding: 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .wei-loading-indicator {
+    width: 25px;
+    height: 25px;
+    /* #ifndef APP-NVUE */
+    animation: loading-H5 1s 0s step-end infinite;
+    /* #endif */
+  }
+  .wei-loading-text {
+    margin-left: 4px;
+  }
+  
+  /* #ifndef APP-NVUE */
+  @keyframes loading-H5 {
+    0% {
+      transform: rotate(0deg);
     }
-    &-indicator {
-      width: 25px;
-      height: 25px;
+    8% {
+      transform: rotate(30deg);
     }
-    &-text {
-      margin-left: 4px;
+    16% {
+      transform: rotate(60deg);
+    }
+    24% {
+      transform: rotate(90deg);
+    }
+    32% {
+      transform: rotate(120deg);
+    }
+    40% {
+      transform: rotate(150deg);
+    }
+    48% {
+      transform: rotate(180deg);
+    }
+    56% {
+      transform: rotate(210deg);
+    }
+    64% {
+      transform: rotate(240deg);
+    }
+    73% {
+      transform: rotate(270deg);
+    }
+    82% {
+      transform: rotate(300deg);
+    }
+    91% {
+      transform: rotate(330deg);
+    }
+    100% {
+      transform: rotate(360deg);
     }
   }
+  /* #endif */
 </style>
