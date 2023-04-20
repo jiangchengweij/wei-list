@@ -94,11 +94,13 @@
   })
   // #endif
   // #ifdef APP-NVUE
-  const { rowGap } = useInjectForm();
+  const { rowGap, type: listType } = useInjectForm();
   const nCellStyle = computed(() => {
     const style = {};
-    if(rowGap.value) {
-      style.marginBottom = rowGap.value + 'px';
+    if(listType === 'watefall') {
+      if(rowGap.value) {
+        style.marginBottom = rowGap.value + 'px';
+      }
     }
     return style;
   })
