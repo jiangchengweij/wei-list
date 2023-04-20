@@ -24,5 +24,6 @@ export function useRefresh(props, emit) {
   return {
     onRefresh,
     complete,
+    refreshing,
   }
 }

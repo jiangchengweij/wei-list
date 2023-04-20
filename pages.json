@@ -15,6 +15,22 @@
     	}
     },
     {
+    	"path": "pages/demo-waterfall/demo-waterfall-absolute1",
+    	"style": {
+    		"navigationBarTitleText": "waterfall-absolute1",
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50
+    	}
+    },
+    {
+    	"path": "pages/demo-waterfall/demo-waterfall-absolute2",
+    	"style": {
+    		"navigationBarTitleText": "waterfall-absolute2",
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50
+    	}
+    },
+    {
     	"path": "pages/demo-list/demo-list",
     	"style": {
     		"navigationBarTitleText": "list",

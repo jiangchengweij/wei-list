@@ -7,8 +7,9 @@
     :loadmoreoffset="50" 
     @loading="onLoadData($event, false)"
     @refresh="onLoadData($event)"
-    :enableLoadmore="true"
     ref="listRef"
+    layout="absolute"
+    :enableLoadmore="true"
   >
     <template #header>
       <wei-header :sticky="true">
@@ -16,9 +17,6 @@
           <text>固定顶部</text>
         </view>
       </wei-header>
-    </template>
-    <template #footer>
-      <view class="demo-footer"><text>底部插槽</text></view>
     </template>
     <wei-cell v-for="(item, index) in listData" :index="index" :key="item.id">
       <view class="demo-item">
@@ -79,7 +77,7 @@
       curList.push({
         id: 'key_'+index,
         title: '主标题'+index,
-        subTitle: '端副标题'+index,
+        subTitle: index%2==0 ? '端副标题'+index : '长长长长长长长长长长长长长长长副标题'+index,
         price: '￥'+(index * 10),
         thumb: `/static/images/test${(index % 4)+1}.webp`
       })
@@ -91,6 +89,7 @@
 <style>
   .demo-header {
     height: 80px;
+    display: flex;
     align-items: center;
     justify-content: center;
     background-color: #fff;
@@ -125,11 +124,5 @@
   .demo-item-price {
     font-size: 16px;
     color: #f0ad4e;
-  }
-  .demo-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
   }
 </style>

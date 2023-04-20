@@ -74,5 +74,9 @@ export default {
   autoFill: {
     type: Boolean,
     default: false
+  },
+  enableLoadmore: {
+    type: Boolean,
+    default: false,
   }
 }

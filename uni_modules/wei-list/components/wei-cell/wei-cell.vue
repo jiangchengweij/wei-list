@@ -52,7 +52,7 @@
   const { columnCount, type: listType, waterfallItemWidth, columnGap, leftGap, addChildren, layout } = useInjectForm();
 
   onMounted(() => {
-    if(layout.value === 'watefall') {
+    if(listType === 'watefall' && layout.value === 'absolute') {
       setTimeout(() => {
         uni.createSelectorQuery().in(instance)
           .select('.wei-cell')
@@ -61,6 +61,7 @@
               //console.log(top, left);
               curTop.value = top;
               curLeft.value = left;
+              curOpacity.value = 1;
             });
           }).exec();
       }, 100)
@@ -69,18 +70,20 @@
   
   const curTop = ref(0);
   const curLeft = ref(0);
+  const curOpacity = ref(0);
   
   const cellStyle = computed(() => {
     const { index } = props;
     const style = {};
     if(listType === 'watefall') {
-      if(layout.value === 'waterfall') { //布局方式
+      if(layout.value === 'absolute') { //布局方式
         style.position = 'absolute';
         if(waterfallItemWidth.value > 0) {
           style.width = waterfallItemWidth.value + 'px';
         }
         style.top = curTop.value + 'px';
         style.left = curLeft.value + 'px';
+        style.opacity = curOpacity;
       }
     } else {
       style.width = '100%';

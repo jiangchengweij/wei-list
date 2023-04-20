@@ -19,43 +19,44 @@
   >
   <!-- #endif -->
   <!-- #ifndef APP-NVUE -->
-  <view class="wei-waterfall-list" :style="{ height: listHeight + 'px' }">
+  <view class="wei-waterfall-list">
   <!-- #endif -->
   
-    <!-- #ifndef APP-NVUE -->
-    <view class="wei-waterfall-header">
-    <!-- #endif -->
-      <slot name="header"></slot>
-    <!-- #ifndef APP-NVUE -->
-    </view>
-    <!-- #endif -->
+    <slot name="header"></slot>
     
     <!-- #ifndef APP-NVUE -->
     <view class="wei-waterfall-list__bd" :style="listbdStyle">
     <!-- #endif -->
       <slot></slot>
-      
-      <!-- #ifdef APP-NVUE -->
-      <header>
-      <!-- #endif -->  
-        <!-- #ifndef APP-NVUE -->
-        <view class="wei-waterfall-loading">
-        <!-- #endif -->
-        <wei-loading :style="loadingStyle" :loadingText="loadingText" :loading="isLoading" :finished="isFinished">
-        </wei-loading>
-        <!-- #ifndef APP-NVUE -->
-        </view>
-        <!-- #endif -->
-      <!-- #ifdef APP-NVUE -->
-      </header>
-      <!-- #endif -->
-
     <!-- #ifndef APP-NVUE -->
     </view>
+    <!-- #endif -->
+      
+    <!-- #ifdef APP-NVUE -->
+    <header>
+    <!-- #endif -->  
+      <!-- #ifndef APP-NVUE -->
+      <view class="wei-waterfall-loading">
+      <!-- #endif -->
+      <wei-loading v-if="enableLoadmore || refreshing" :loadingText="loadingText" :loading="isLoading" :finished="isFinished">
+      </wei-loading>
+      <!-- #ifndef APP-NVUE -->
+      </view>
+      <!-- #endif -->
+    <!-- #ifdef APP-NVUE -->
+    </header>
     <!-- #endif -->
 
   <!-- #ifndef APP-NVUE -->
   </view>
+  <!-- #endif -->
+  
+  <!-- #ifdef APP-NVUE -->
+  <header>
+  <!-- #endif -->  
+    <slot name="footer"></slot>
+  <!-- #ifdef APP-NVUE -->
+  </header>
   <!-- #endif -->
   
   <!-- #ifdef APP-NVUE -->
@@ -74,7 +75,7 @@
   const emit = defineEmits(['loading', 'refresh']);
   const props = defineProps(basicProps);
   const { isLoading, loadingText, onLoadmore, isFinished } = useLoading(props, emit);
-  const { onRefresh } = useRefresh(props, emit);
+  const { onRefresh, refreshing } = useRefresh(props, emit);
   
   // #ifndef APP-NVUE
   // 计算元素的宽度传达给子元素用于布局
@@ -82,8 +83,7 @@
   const waterfallWidth = ref(0);
   const listHeight = ref(1);
   const listTop = ref(0);
-  const loadingHeight = ref(0);
-  
+
   onMounted(() => {
     setInit();
   })
@@ -94,9 +94,6 @@
     })
     getClientRect('.wei-waterfall-list__bd').then(res => {
       listTop.value = res.top;
-    })
-    getClientRect('.wei-waterfall-loading').then(res => {
-      loadingHeight.value = res.height;
     })
   }
   
@@ -160,15 +157,13 @@
         }
         children[minInd].fill = true;
         const left = children[minInd].left;
-        var top = minTop + tempLeftGap;
-        loadingTop.value = Math.max(loadingTop.value, minTop + rect.height + tempRowGap);
-        listHeight.value = listTop.value + loadingTop.value + loadingHeight.value;
+        var top = minTop + tempRowGap;
+        listHeight.value = Math.max(listHeight.value, top + rect.height);
         children.push({ top, left, height: rect.height, fill: false });
         callback({top, left});
       } else {
         var top = 0;
-        loadingTop.value = Math.max(loadingTop.value, rect.height + tempRowGap);
-        listHeight.value = listTop.value + loadingTop.value + loadingHeight.value;
+        listHeight.value = Math.max(listHeight.value, rect.height);
         const left = len % count
           * (waterfallItemWidth.value + tempColumnGap) + tempLeftGap;
         children.push({ top, left, height: rect.height, fill: false });
@@ -182,8 +177,7 @@
         const prevItem = children[len - count];
         top = prevItem.top + prevItem.height + tempRowGap;
       }
-      loadingTop.value = Math.max(loadingTop.value, top + rect.height);
-      listHeight.value = listTop.value + loadingTop.value + loadingHeight.value;
+      listHeight.value = Math.max(listHeight.value, top + rect.height);
       children.push({ top, left, height: rect.height });
       callback({top, left});
     }
@@ -194,11 +188,14 @@
     const style = {};
     if(layout === 'grid') {
       style.display = 'grid';
-      style.gridTemplateColumns = '1fr 1fr';
+      const tempColumns = Array.from({ length: getToNum(columnCount, 1) }).fill('1fr') 
+      style.gridTemplateColumns = tempColumns.join(' ');
       style.gridColumnGap = columnGap + 'px';
       style.gridRowGap = rowGap + 'px';
       style.paddingLeft = leftGap + 'px';
       style.paddingRight = rightGap + 'px';
+    } else {
+      style.height = listHeight.value + 'px';
     }
     return style;
   })
@@ -222,7 +219,9 @@
   }
   
   function loadMore(e = {}) {
-    onLoadmore(e);
+    if(props.enableLoadmore) {
+      onLoadmore(e);
+    }
   }
 
   useProvideList({

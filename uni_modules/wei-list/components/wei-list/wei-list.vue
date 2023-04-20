@@ -78,8 +78,8 @@
     /* #endif */
     /* #ifndef APP-NVUE */
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
     /* #endif */
   }
 </style>
