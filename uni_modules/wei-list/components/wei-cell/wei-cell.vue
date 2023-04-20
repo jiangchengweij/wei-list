@@ -94,10 +94,10 @@
   })
   // #endif
   // #ifdef APP-NVUE
-  const { rowGap, type: listType } = useInjectForm();
+  const { rowGap, type: nlistType } = useInjectForm();
   const nCellStyle = computed(() => {
     const style = {};
-    if(listType === 'watefall') {
+    if(nlistType === 'watefall') {
       if(rowGap.value) {
         style.marginBottom = rowGap.value + 'px';
       }
