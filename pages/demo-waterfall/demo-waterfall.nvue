@@ -4,6 +4,7 @@
     left-gap="10"
     right-gap="10"
     column-gap="10"
+    row-gap="10"
     :loadmoreoffset="50" 
     @loading="onLoadData($event, false)"
     @refresh="onLoadData($event)"

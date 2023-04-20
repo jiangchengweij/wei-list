@@ -20,6 +20,8 @@
 
 <script setup>
   import { computed, onMounted } from "vue";
+  import { useInjectForm } from '../wei-list/context.js';
+
   const props = defineProps({
     sticky: {
       type: Boolean,
@@ -34,17 +36,22 @@
       default: 299,
     }
   })
+  
+  // #ifndef APP-NVUE
   const { type: listType } = useInjectForm();
+  // #endif
 
   const headerStyle = computed(() => {
     const { sticky, top, zIndex } = props;
     const style = {};
+     // #ifndef APP-NVUE
     if(listType.value === 'list' || sticky) {
       const { windowTop } = uni.getWindowInfo();
       style.position = 'sticky';
       style.top = windowTop + top + 'px';
       style.zIndex = zIndex;
     }
+    // #endif
     return style;
   })
 </script>

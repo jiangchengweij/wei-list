@@ -6,15 +6,17 @@
     :recycle="recycle"
     :renderReversePosition="renderReversePosition"
   >
-  <!-- #endif -->
-  <!-- #ifndef APP-NVUE -->
-  <view class="wei-cell" :style="cellStyle">
-  <!-- #endif -->
-    <slot></slot>
-  <!-- #ifndef APP-NVUE -->
-  </view>
-  <!-- #endif -->
-  <!-- #ifdef APP-NVUE -->
+    <view :style="nCellStyle">
+    <!-- #endif -->
+    <!-- #ifndef APP-NVUE -->
+    <view class="wei-cell" :style="cellStyle">
+    <!-- #endif -->
+      <slot></slot>
+    <!-- #ifndef APP-NVUE -->
+    </view>
+    <!-- #endif -->
+    <!-- #ifdef APP-NVUE -->
+    </view>
   </cell>
   <!-- #endif -->
 </template>
@@ -64,7 +66,7 @@
               curOpacity.value = 1;
             });
           }).exec();
-      }, 100)
+      }, 200)
     }
   })
   
@@ -87,6 +89,16 @@
       }
     } else {
       style.width = '100%';
+    }
+    return style;
+  })
+  // #endif
+  // #ifdef APP-NVUE
+  const { rowGap } = useInjectForm();
+  const nCellStyle = computed(() => {
+    const style = {};
+    if(rowGap.value) {
+      style.marginBottom = rowGap.value + 'px';
     }
     return style;
   })

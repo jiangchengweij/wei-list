@@ -236,6 +236,7 @@
     layout: computed(() => props.layout),
     addChildren,
     // #endif
+    rowGap: computed(() => getToNum(props.rowGap, 0))
   })
   
   defineExpose({
