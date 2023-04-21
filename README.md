@@ -3,4 +3,4 @@
 注意在nvue下会使用原生渲染方式，即nvue下的list，waterfall。
 目前已经在android、ios、h5、微信小程序端测试可正常使用。
 
-具体[使用文档]()
+具体使用请查看[使用文档](https://ext.dcloud.net.cn/plugin?name=wei-list)
