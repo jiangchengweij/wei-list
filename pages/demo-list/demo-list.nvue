@@ -7,6 +7,11 @@
     @refresh="onLoadData($event)"
     ref="listRef"
   >
+    <wei-header>
+      <view class="demo-header">
+        <text>固定顶部</text>
+      </view>
+    </wei-header>
     <wei-cell v-for="item in listData" :key="item.id">
       <view class="demo-item">
         <image class="demo-item-image" :src="item.thumb" mode="widthFix"></image>
@@ -104,5 +109,12 @@
   .demo-item-price {
     font-size: 16px;
     color: #f0ad4e;
+  }
+  .demo-header {
+    height: 80px;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    margin-bottom: 10px;
   }
 </style>

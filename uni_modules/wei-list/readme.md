@@ -1,6 +1,7 @@
 ## 轻量级页面列表组件，支持瀑布流，完美支持nvue，兼容多端的列表组件
 只需要少许的配置就能实现跨越多端的高性能列表。
 注意在nvue下会使用原生渲染方式，即nvue下的list，waterfall。
+而在非nvue下会使用页面滚动和下拉刷新，因为其性能比scroll-view更好，官方文档都有说明。
 目前已经在android、ios、h5、微信小程序端测试可正常使用。
 
 ### wei-list
@@ -87,6 +88,7 @@
 |completeLoading  |触发加载完成  | |
 |endLoading  |触发加载结束  | |
 |completeRefresh  |触发刷新结束  | |
+|getListRef  |获取的内部列表组件的引用  | |
 #### 插槽
 + default 默认列表数据
 + footer 底部插槽
@@ -202,8 +204,10 @@ absolute布局会形成高度掺杂不齐的瀑布流效果，通过自动计算
 |completeLoading  |触发加载完成  | |
 |endLoading  |触发加载结束  | |
 |completeRefresh  |触发刷新结束  | |
+|getListRef  |获取的内部列表组件的引用  | |
 #### 插槽
 + default 默认列表数据
++ header 头部插槽
 + footer 底部插槽
 + refresher 上拉刷新的插槽，只针对nvue起作用
 

@@ -53,7 +53,7 @@
   >
   <!-- #endif -->
   <!-- #ifndef APP-NVUE -->
-  <view class="wei-waterfall-list">
+  <view class="wei-waterfall-list" ref="listRef">
   <!-- #endif -->
   
     <!-- #ifdef MP-WEIXIN -->
