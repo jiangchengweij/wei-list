@@ -5,7 +5,7 @@
    * @tutorial https://uniapp.dcloud.net.cn/component/cell.html
    * @property {boolean} keepScollPosition 它控制插入单元格后是否保持最后一个滑动位置。只支持nvue
    * @property {string} insertAnimation = [none|default] cell 的插入动画。当前只支持 none 和 default。只支持nvue
-   * @property {string} delete-animation = [none|default] cell 的插入动画。当前只支持 none 和 default。只支持nvue
+   * @property {string} delete-animation = [none|default]  cell 的删除动画。当前只支持 none 和 default。只支持nvue
    * @property {boolean} recycle 默认值 true。这个属性控制这个 Cell 的 view 和子 views 是否在列表滚动时进行回收。只支持nvue
    * @render-reverse-position {boolean} 默认值 false。定义开始渲染的位置。只支持nvue
    */
@@ -63,7 +63,7 @@
   const { columnCount, type: listType, waterfallItemWidth, columnGap, leftGap, addChildren, layout, delay } = useInjectForm();
 
   onMounted(() => {
-    if(listType === 'watefall' && layout.value === 'absolute') {
+    if(listType === 'waterfall' && layout.value === 'absolute') {
       setTimeout(() => {
         uni.createSelectorQuery().in(instance)
           .select('.wei-cell')
@@ -85,7 +85,7 @@
   
   const cellStyle = computed(() => {
     const style = {};
-    if(listType === 'watefall') {
+    if(listType === 'waterfall') {
       if(layout.value === 'absolute') { //布局方式
         style.position = 'absolute';
         if(waterfallItemWidth.value > 0) {
@@ -105,7 +105,7 @@
   const { rowGap, type: nlistType } = useInjectForm();
   const nCellStyle = computed(() => {
     const style = {};
-    if(nlistType === 'watefall') {
+    if(nlistType === 'waterfall') {
       if(rowGap.value) {
         style.marginBottom = rowGap.value + 'px';
       }

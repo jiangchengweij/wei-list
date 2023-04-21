@@ -49,6 +49,7 @@
     :enableBackToTop="enableBackToTop"
     :renderReverse="renderReverse"
     @loadmore="onLoadmore"
+    ref="listRef"
   >
   <!-- #endif -->
   <!-- #ifndef APP-NVUE -->
@@ -114,9 +115,9 @@
 
   const emit = defineEmits(['loadmore', 'refresh']);
   const props = defineProps(basicProps);
-  const { isLoading, loadingText, onLoadmore, isFinished } = useLoading(props, emit);
-  const { onRefresh, refreshing } = useRefresh(props, emit);
-  
+  const { isLoading, loadingText, onLoadmore, isFinished, complete: completeLoading, end: endLoading } = useLoading(props, emit);
+  const { onRefresh, complete: completeRefresh, refreshing } = useRefresh(props, emit);
+  const listRef = ref(null);
   // #ifndef APP-NVUE
   // 计算元素的宽度传达给子元素用于布局
   const instance = getCurrentInstance();
@@ -259,9 +260,13 @@
       onLoadmore(e);
     }
   }
+  
+  function getListRef() {
+    return listRef.value;
+  }
 
   useProvideList({
-    type: 'watefall',
+    type: 'waterfall',
     // #ifndef APP-NVUE
     columnCount: computed(() => getToNum(props.columnCount, 1)),
     columnWidth: computed(() => getToNum(props.columnWidth, 0)),
@@ -278,7 +283,11 @@
   
   defineExpose({
     reload,
-    loadMore
+    loadMore,
+    completeLoading,
+    endLoading,
+    completeRefresh,
+    getListRef
   })
 </script>
 

@@ -43,22 +43,28 @@
     },
     zIndex: {
       type: Number,
-      default: 299,
+      default: 99,
     }
   })
   
-  // #ifndef APP-NVUE
+
   const { type: listType } = useInjectForm();
-  // #endif
 
   const headerStyle = computed(() => {
     const { sticky, top, zIndex } = props;
     const style = {};
      // #ifndef APP-NVUE
-    if(listType.value === 'list' || sticky) {
+    if(listType === 'list' || sticky) {
       const { windowTop } = uni.getWindowInfo();
       style.position = 'sticky';
       style.top = windowTop + top + 'px';
+      style.zIndex = zIndex;
+    }
+    // #endif
+    // #ifdef APP-NVUE
+    if(listType === 'waterfall' && sticky) {
+      style.position = 'sticky';
+      style.top = top + 'px';
       style.zIndex = zIndex;
     }
     // #endif
@@ -71,7 +77,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    /* #ifdef APP-NVUE */
+    /* #ifndef APP-NVUE */
     box-sizing: border-box;
     /* #endif */
   }

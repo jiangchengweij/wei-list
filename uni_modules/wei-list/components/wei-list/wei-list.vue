@@ -36,10 +36,11 @@
       :enableBackToTop="enableBackToTop"
       :renderReverse="renderReverse"
       @loadmore="onLoadmore"
+      ref="listRef"
     >
   <!-- #endif -->
     <!-- #ifndef APP-NVUE -->
-    <view class="wei-list">
+    <view class="wei-list" ref="listRef">
     <!-- #endif -->
       <!-- #ifdef MP-WEIXIN -->
       <template #refresher>
@@ -76,7 +77,7 @@
 </template>
 <script setup>
   import { onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app';
-  import { computed } from "vue";
+  import { computed, ref } from "vue";
   import { useProvideList } from './context.js';
   import basicProps from './props.js';
   import { useLoading } from "../wei-loading/useLoading.js";
@@ -88,6 +89,8 @@
   useProvideList({
     type: 'list',
   })
+  
+  const listRef = ref(null);
 
   function reload(e = {}) {
     onRefresh(e);
@@ -99,12 +102,17 @@
     }
   }
   
+  function getListRef() {
+    return listRef.value;
+  }
+  
   defineExpose({
     reload,
     loadMore,
     completeLoading,
     endLoading,
-    completeRefresh
+    completeRefresh,
+    getListRef
   })
 </script>
 <style>

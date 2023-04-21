@@ -1,9 +1,10 @@
 ## 轻量级页面列表组件，支持瀑布流，完美支持nvue，兼容多端的列表组件
+只需要少许的配置就能实现跨越多端的高性能列表。
 注意在nvue下会使用原生渲染方式，即nvue下的list，waterfall。
-目前已经在android、ios、h5、微信小程序端测试可正常使用，
+目前已经在android、ios、h5、微信小程序端测试可正常使用。
 
 ### wei-list
-
+普通的列表的组件，使用和nvue的list一致。
 #### 示例
 ```
 <template>
@@ -92,8 +93,11 @@
 + refresher 上拉刷新的插槽，只针对nvue起作用
 
 ### wei-waterfall
-
-#### 使用说明
+瀑布流组件，对应nvue的wei-waterfall,支持grid和absolute布局，通过属性layout设置。
+grid布局使用css支持的grid布局演示，纯css实现，所以性能是损耗是最低的，但是缺点就是子cell高度都是一致的。
+absolute布局会形成高度掺杂不齐的瀑布流效果，通过自动计算元素的高度设置absolute的top,left插入。
+有时候每一列的子元素会因为数据越来越多，导致两边的高度相差越来越大，此时可以配置autoFill为true开启智能自动填坑模式，
+尽可能的元素会往最凹的地方排列。absolute布局在nvue下无效，因为nvue已经是高度掺杂不齐的普通流。此组件具体可参考示例。
 
 #### 示例
 ```
@@ -204,10 +208,23 @@
 + refresher 上拉刷新的插槽，只针对nvue起作用
 
 ### wei-cell
-
+子部渲染项，对应nvue的cell
+次组件必须值wei-list，wei-waterfall的直接组件
 #### 属性说明
+|属性名 |类型 |默认值	|说明	|
+|:--:|:--:|:--:|:--:|
+|keepScollPosition|Boolean|false|它控制插入单元格后是否保持最后一个滑动位置。只支持nvue|
+|insetAnimation|string|false|cell 的插入动画。当前只支持 none 和 default。只支持nvue|
+|delete-animation|string|false|cell 的删除动画。当前只支持 none 和 default。只支持nvue
+|recycle|Boolean|true|这个属性控制这个 Cell 的 view 和子 views 是否在列表滚动时进行回收。只支持nvue|
+|renderReversePosition|Boolean|false|定义开始渲染的位置。只支持nvue|
 
 ### wei-header
-
+头部组件，对应nvue的header,
+次组件必须值wei-list，wei-waterfall的直接组件
 #### 属性说明
-
+|属性名 |类型 |默认值	|说明	|
+|:--:|:--:|:--:|:--:|
+|sticky|Boolean|false|是否固定在顶部,wei-waterfall下有效，wei-list无论何值，都会固定顶部，为了和nvue的list使用保持一致|
+|top|Number|0|固定顶部的距离|
+|zIndex|Number|99|层叠属性值|
