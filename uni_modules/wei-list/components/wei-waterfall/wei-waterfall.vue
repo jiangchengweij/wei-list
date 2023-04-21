@@ -1,15 +1,48 @@
+<script>
+  /**
+   * 瀑布流
+   * @description 高性能瀑布流组件，对nvue waterfall的扩展，兼容多端
+   * @property {String} layout=[grid|absolute] 瀑布流布局方式
+   * @property {Boolean} autoFill 默认 false 是否启用智能填坑模式
+   * @property {Number} columnCount 每行列数
+   * @property {Number} columnWidth 每行宽度，不指定会自动计算
+   * @property {Number} columnGap 每列间隔
+   * @property {Number} rowGap 每行间隔
+   * @property {Number} leftGap 左边cell和列表的间隙. 如果未指定 ，则对应 0
+   * @property {Number} rightGap 右边cell和列表的间隙. 如果未指定，则对应 0
+   * @property {Number} delay 延时渲染子cell，在layout=absolute时启用
+   * @property {Boolean} showScrollbar 控制是否出现滚动条
+   * @property {Boolean} refresherEnable 默认 false 是否启用下拉刷新，必须同pages配置enablePullDownRefresh相同
+   * @property {Boolean} enableLoadmore 默认 false 是否启用上拉加载
+   * @property {Object} loadingTextConfig 加载文案，实例{ loading: '正在加载...', finished: '没有更多了', error: '' }
+   * @property {Boolen} bounce 默认 true 控制是否回弹效果, iOS 不支持动态修改
+   * @property {Number} loadmoreoffset 默认 0 触发 loadmore 事件所需要的垂直偏移距离（设备屏幕底部与 list 底部之间的距离），建议手动设置此值，设置大于0的值即可
+   * @property {Number} offsetAccuracy 默认 10 控制 onscroll 事件触发的频率：表示两次onscroll事件之间列表至少滚动了10px。注意，将该值设置为较小的数值会提高滚动事件采样的精度，但同时也会降低页面的性能
+   * @property {Boolean} scrollable 默认 true 是否允许List滚动
+   * @property {Boolean} enableBackToTop 默认 false iOS点击顶部状态栏滚动条返回顶部，只支持竖向
+   * @property {Boolean} renderReverse 默认 false 定义是否从底部渲染，需搭配cell的属性render-reverse-position共同使用，单独配置会导致渲染异常。
+   * @event {Function} reload 重新加载数据，也是初始化数据
+   * @event {Function} loadmore 加载更多事件
+   * @function {Function} reload 触发重新加载
+   * @function {Function} loadMore 触发加载更多事件
+   * @function {Function} completeLoading 触发加载完成
+   * @function {Function} endLoading 触发加载结束
+   * @function {Function} completeRefresh 触发刷新结束
+   */
+  export default {}
+</script>
 <template>
   <!-- #ifdef APP-NVUE -->
   <waterfall
-    :show-scrollba="showScrollbar"
+    :show-scrollbar="showScrollbar"
     :column-count="columnCount"
     :column-width="columnWidth"
     :column-gap="columnGap"
     :left-gap="leftGap"
     :right-gap="rightGap"
     :always-scrollable-vertical="alwaysScrollableVertical"
-    :bounce="false"
-    :loadmoreoffset="50"
+    :bounce="bounce"
+    :loadmoreoffset="loadmoreoffset"
     :offsetAccuracy="offsetAccuracy"
     :pageEnabled="pageEnabled"
     :scrollable="scrollable"
@@ -22,6 +55,13 @@
   <view class="wei-waterfall-list">
   <!-- #endif -->
   
+    <!-- #ifdef MP-WEIXIN -->
+    <template #refresher>
+    <!-- #endif -->
+    <!-- #ifdef MP-WEIXIN -->
+    </template>
+    <!-- #endif -->
+
     <slot name="header"></slot>
     
     <!-- #ifndef APP-NVUE -->
@@ -72,7 +112,7 @@
   import { useRefresh } from '../wei-list/useRefresh.js';
   import { getToNum } from '../wei-list/util.js';
 
-  const emit = defineEmits(['loading', 'refresh']);
+  const emit = defineEmits(['loadmore', 'refresh']);
   const props = defineProps(basicProps);
   const { isLoading, loadingText, onLoadmore, isFinished } = useLoading(props, emit);
   const { onRefresh, refreshing } = useRefresh(props, emit);
@@ -82,7 +122,6 @@
   const instance = getCurrentInstance();
   const waterfallWidth = ref(0);
   const listHeight = ref(1);
-  const listTop = ref(0);
 
   onMounted(() => {
     setInit();
@@ -91,9 +130,6 @@
   function setInit() {
     getClientRect('.wei-waterfall-list').then(res => {
       waterfallWidth.value = res.width;
-    })
-    getClientRect('.wei-waterfall-list__bd').then(res => {
-      listTop.value = res.top;
     })
   }
   
@@ -232,6 +268,7 @@
     columnGap: computed(() => getToNum(props.columnGap, 0)),
     leftGap: computed(() => getToNum(props.leftGap, 0)),
     rightGap: computed(() => getToNum(props.rightGap, 0)),
+    delay: computed(() => props.delay),
     waterfallItemWidth: waterfallItemWidth,
     layout: computed(() => props.layout),
     addChildren,

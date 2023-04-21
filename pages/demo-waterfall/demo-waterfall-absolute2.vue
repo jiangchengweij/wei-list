@@ -5,7 +5,7 @@
     right-gap="10"
     column-gap="10"
     :loadmoreoffset="50" 
-    @loading="onLoadData($event, false)"
+    @loadmore="onLoadData($event, false)"
     @refresh="onLoadData($event)"
     ref="listRef"
     layout="absolute"

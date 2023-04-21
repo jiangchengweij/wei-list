@@ -1,3 +1,13 @@
+<script>
+  /**
+   * wei-header
+   * @description wei-header必须以一级子组件的形式存在于 list waterfall 中,同nvue的header
+   * @property {Boolean} sticky 默认 false。是否固定在顶部,wei-waterfall下有效，wei-list无论何值，都会固定顶部，为了list使用对齐
+   * @property {Number} top 固定顶部的距离
+   * @property {Number} zIndex 层叠属性值
+   */
+  export default {}
+</script>
 <template>
   <!-- #ifdef APP-NVUE -->
   <header :style="headerStyle">
@@ -61,7 +71,9 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    /* #ifdef APP-NVUE */
     box-sizing: border-box;
+    /* #endif */
   }
 </style>
 

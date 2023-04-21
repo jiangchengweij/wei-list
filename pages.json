@@ -9,7 +9,7 @@
     {
     	"path": "pages/demo-waterfall/demo-waterfall",
     	"style": {
-    		"navigationBarTitleText": "watefall",
+    		"navigationBarTitleText": "宫格瀑布流",
         "enablePullDownRefresh": true,
         "onReachBottomDistance": 50
     	}
@@ -17,7 +17,7 @@
     {
     	"path": "pages/demo-waterfall/demo-waterfall-absolute1",
     	"style": {
-    		"navigationBarTitleText": "waterfall-absolute1",
+    		"navigationBarTitleText": "普通瀑布流",
         "enablePullDownRefresh": true,
         "onReachBottomDistance": 50
     	}
@@ -25,7 +25,7 @@
     {
     	"path": "pages/demo-waterfall/demo-waterfall-absolute2",
     	"style": {
-    		"navigationBarTitleText": "waterfall-absolute2",
+    		"navigationBarTitleText": "智能填坑瀑布流",
         "enablePullDownRefresh": true,
         "onReachBottomDistance": 50
     	}
@@ -33,7 +33,7 @@
     {
     	"path": "pages/demo-list/demo-list",
     	"style": {
-    		"navigationBarTitleText": "list",
+    		"navigationBarTitleText": "普通列表",
         "enablePullDownRefresh": true,
         "onReachBottomDistance": 50
     	}

@@ -7,7 +7,7 @@ export function useLoading(props, emit) {
     return Object.assign({}, {
       loading: '正在加载...',
       finished: '没有更多了',
-      errro: '',
+      error: '',
     }, props.loadingTextConfig)
   })
   var loadingText = ref(loadingTextMap.value.loading);
@@ -15,7 +15,7 @@ export function useLoading(props, emit) {
     if(isLoading.value || isFinished.value) { return };
     isLoading.value = true;
     loadingText.value = loadingTextMap.value.loading;
-    emit('loading', {
+    emit('loadmore', {
       ...e,
       end,
       complete,

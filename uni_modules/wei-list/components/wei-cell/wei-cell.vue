@@ -1,3 +1,16 @@
+<script>
+  /**
+   * wei-cell
+   * @description wei-cell必须以一级子组件的形式存在于 list waterfall 中,同nvue的cell
+   * @tutorial https://uniapp.dcloud.net.cn/component/cell.html
+   * @property {boolean} keepScollPosition 它控制插入单元格后是否保持最后一个滑动位置。只支持nvue
+   * @property {string} insertAnimation = [none|default] cell 的插入动画。当前只支持 none 和 default。只支持nvue
+   * @property {string} delete-animation = [none|default] cell 的插入动画。当前只支持 none 和 default。只支持nvue
+   * @property {boolean} recycle 默认值 true。这个属性控制这个 Cell 的 view 和子 views 是否在列表滚动时进行回收。只支持nvue
+   * @render-reverse-position {boolean} 默认值 false。定义开始渲染的位置。只支持nvue
+   */
+  export default {}
+</script>
 <template>
   <!-- #ifdef APP-NVUE -->
   <cell
@@ -43,15 +56,11 @@
       type: Boolean,
       default: false
     },
-    index: {
-      type: Number,
-      default: null,
-    }
   })
 
   // #ifndef APP-NVUE
   const instance = getCurrentInstance();
-  const { columnCount, type: listType, waterfallItemWidth, columnGap, leftGap, addChildren, layout } = useInjectForm();
+  const { columnCount, type: listType, waterfallItemWidth, columnGap, leftGap, addChildren, layout, delay } = useInjectForm();
 
   onMounted(() => {
     if(listType === 'watefall' && layout.value === 'absolute') {
@@ -66,7 +75,7 @@
               curOpacity.value = 1;
             });
           }).exec();
-      }, 200)
+      }, delay.value)
     }
   })
   
@@ -75,7 +84,6 @@
   const curOpacity = ref(0);
   
   const cellStyle = computed(() => {
-    const { index } = props;
     const style = {};
     if(listType === 'watefall') {
       if(layout.value === 'absolute') { //布局方式

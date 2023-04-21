@@ -1,11 +1,14 @@
 {
-  "id": "wei-watefall",
-  "displayName": "wei-watefall",
+  "id": "wei-list",
+  "displayName": "wei-list",
   "version": "1.0.0",
-  "description": "wei-watefall",
+  "description": "轻量，高性能页面列表",
   "keywords": [
-    "wei-watefall"
-],
+    "list",
+    "watefall",
+    "列表",
+    "瀑布流"
+  ],
   "repository": "",
   "engines": {
     "HBuilderX": "^3.1.0"

@@ -2,7 +2,8 @@
   <wei-list 
     class="wei-list" 
     :loadmoreoffset="30" 
-    @loading="onLoadData($event, false)" 
+    :enableLoadmore="true"
+    @loadmore="onLoadData($event, false)" 
     @refresh="onLoadData($event)"
     ref="listRef"
   >

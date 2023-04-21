@@ -13,7 +13,11 @@ export default {
   },
   columnGap: {
     type: [String, Number],
-    default: 'normal',
+    default: 32,
+  },
+  delay: {
+    type: Number,
+    default: 200
   },
   rowGap: {
     type: [String, Number],

@@ -3,6 +3,22 @@ export default {
     type: Boolean,
     default: false,
   },
+  refresherEnable: {
+    type: Boolean,
+    default: false,
+  },
+  enableLoadmore: {
+    type: Boolean,
+    default: false,
+  },
+  refreshTextConfig: {
+    type: Object,
+    default: null,
+  },
+  loadingTextConfig: {
+    type: Object,
+    default: null,
+  },
   bounce: {
     type: Boolean,
     default: false,
@@ -30,17 +46,5 @@ export default {
   renderReverse: {
     type: Boolean,
     default: false,
-  },
-  refresherEnable: {
-    type: Boolean,
-    default: false,
-  },
-  refreshTextConfig: {
-    type: Object,
-    default: null,
-  },
-  loadingTextConfig: {
-    type: Object,
-    default: null,
   },
 }
